@@ -70,7 +70,8 @@ async function getEngine(){
  const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd';
  const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');
  const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
- await candidate.load({coreURL,wasmURL});
+ const classWorkerURL=new URL('./ffmpeg/worker.js',location.href).href;
+ await candidate.load({classWorkerURL,coreURL,wasmURL});
  ffmpeg=candidate;
  return ffmpeg;
 }
