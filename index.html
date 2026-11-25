@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090b12"><meta name="description" content="MEGAMIND — a private, browser-based video clipping studio.">
+<title>MEGAMIND — Video Clipping Studio</title>
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#111522;--panel2:#171d2d;--line:#252d40;--muted:#9ba6bc;--text:#f4f6fb;--accent:#9b8cff;--cyan:#62d9e8;--good:#63d7a2}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% -15%,#25204b 0,transparent 38%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}button{cursor:pointer}.wrap{max-width:1160px;margin:auto;padding:26px 24px 64px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:44px}.brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.13em}.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#5ad9e8);display:grid;place-items:center;color:#080b14;font-weight:950;font-size:20px;box-shadow:0 8px 28px #8172ff40}.pill{border:1px solid #333b50;border-radius:99px;padding:7px 12px;color:#b9c3d6;font-size:12px}.hero{margin-bottom:28px}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:.2em}.hero h1{font-size:clamp(32px,5vw,54px);line-height:1.06;letter-spacing:-.045em;margin:10px 0}.hero p{color:var(--muted);max-width:620px;margin:0}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:18px}.card{background:linear-gradient(160deg,#151b2a,#101522);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 60px #0002}.card h2{font-size:16px;margin:0 0 5px}.sub{color:var(--muted);font-size:13px;margin:0 0 17px}.drop{border:1px dashed #49516d;background:#0c111d;border-radius:14px;min-height:150px;display:grid;place-items:center;text-align:center;padding:22px;transition:.2s}.drop.over{border-color:var(--cyan);background:#12202a}.uploadicon{font-size:27px;margin-bottom:6px}.drop strong{display:block}.drop span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.btn{border:0;border-radius:10px;padding:11px 16px;background:linear-gradient(100deg,#a18fff,#69d8e5);color:#090b12;font-weight:800}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.secondary{background:#20283a;color:#e7ebf5;border:1px solid #303b52}.btn.full{width:100%;margin-top:16px}.preview{width:100%;max-height:390px;background:#05070b;border-radius:12px;display:block;margin-top:14px}.filemeta{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--muted);font-size:12px;margin-top:10px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.field label{display:block;color:#bac4d7;font-size:12px;margin-bottom:7px}.field input{width:100%;background:#0b101b;border:1px solid #30394d;color:var(--text);border-radius:9px;padding:10px}.range{margin-top:18px}.rangehead{display:flex;justify-content:space-between;color:#bac4d7;font-size:12px;margin-bottom:8px}.track{height:7px;background:#2a3245;border-radius:99px;position:relative;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--cyan));border-radius:99px}.status{font-size:12px;color:var(--muted);margin-top:12px;min-height:18px}.progress{height:6px;border-radius:9px;background:#293247;overflow:hidden;margin-top:8px;display:none}.progress>div{height:100%;width:0;background:var(--good);transition:width .15s}.result{display:none;margin-top:18px;padding:14px;border:1px solid #2b604e;background:#10251f;border-radius:12px}.result a{color:#83edbd;font-weight:750}.tip{color:var(--muted);font-size:12px;margin-top:16px}.steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.steps span{font-size:11px;color:#c0c8d8;background:#1b2334;padding:6px 9px;border-radius:99px}.footer{color:#77839b;text-align:center;font-size:12px;margin-top:34px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.top{margin-bottom:32px}.wrap{padding:18px 14px 44px}} 
+</style>
+</head>
+<body><main class="wrap">
+<header class="top"><div class="brand"><div class="logo">M</div><span>MEGAMIND</span></div><div class="pill">VIDEO CLIPPING STUDIO · BETA</div></header>
+<section class="hero"><div class="eyebrow">YOUR VIDEO. YOUR MOMENT.</div><h1>Make the moment<br> yours.</h1><p>Trim long videos into shareable clips. Choose the exact moment, export an MP4, and keep your files on your own device.</p><div class="steps"><span>01 · Upload</span><span>02 · Set in & out</span><span>03 · Export clip</span></div></section>
+<section class="layout">
+<div class="card"><h2>01 / Source video</h2><p class="sub">Choose a video file from your device.</p>
+<div class="drop" id="drop"><div><div class="uploadicon">＋</div><strong>Drop your video here</strong><span>or choose a file · MP4, MOV, WebM and more</span><div style="margin-top:14px"><button class="btn secondary" id="choose">Choose video</button></div></div></div>
+<input id="file" type="file" accept="video/*" hidden>
+<video id="video" class="preview" controls playsinline style="display:none"></video>
+<div class="filemeta" id="filemeta" hidden><span id="filename"></span><span id="durationLabel"></span></div>
+<div class="range"><div class="rangehead"><span>Clip selection</span><span id="selectedDuration">0.0 sec selected</span></div><div class="track"><div class="fill" id="fill"></div></div></div>
+<div class="controls"><div class="field"><label for="start">START TIME (seconds)</label><input id="start" type="number" min="0" step=".1" value="0" disabled></div><div class="field"><label for="end">END TIME (seconds)</label><input id="end" type="number" min="0" step=".1" value="15" disabled></div></div>
+</div>
+<aside class="card"><h2>02 / Export settings</h2><p class="sub">Create your selected section as an MP4 video.</p>
+<div class="field"><label>OUTPUT FORMAT</label><input value="MP4 · H.264 video + AAC audio" disabled></div>
+<div class="field" style="margin-top:13px"><label>CLIP NAME</label><input id="clipname" value="megamind-clip" maxlength="60"></div>
+<button class="btn full" id="export" disabled>✂ Export clip</button>
+<div class="progress" id="progress"><div id="progressbar"></div></div><div class="status" id="status" aria-live="polite">Upload a video to get started.</div>
+<div class="result" id="result"><strong>✓ Your clip is ready</strong><p style="margin:7px 0"><a id="download" download="megamind-clip.mp4">Download MP4 ↓</a></p><span style="font-size:12px;color:#a9c9bc">Your exported clip is ready on this device.</span></div>
+<p class="tip">Processing happens locally in your browser using FFmpeg WebAssembly. Your source video is not uploaded to a MEGAMIND server. Large videos may use substantial memory and take time.</p>
+</aside></section>
+<div class="footer">MEGAMIND · A simple studio for standout moments</div>
+</main>
+<script type="module">
+const $=id=>document.getElementById(id);
+const fileInput=$('file'), video=$('video'), drop=$('drop'), start=$('start'), end=$('end'), exportBtn=$('export');
+let sourceFile=null, duration=0, ffmpeg=null, outputUrl=null, busy=false;
+const fmt=n=>Number.isFinite(n)?n.toFixed(1)+'s':'—';
+function setStatus(s){$('status').textContent=s}
+function updateSelection(){
+ const a=Number(start.value)||0,b=Number(end.value)||0,valid=sourceFile&&a>=0&&b>a&&b<=duration;
+ $('selectedDuration').textContent=fmt(Math.max(0,b-a))+' selected';
+ $('fill').style.width=duration?Math.max(0,Math.min(100,(b-a)/duration*100))+'%':'0%';
+ exportBtn.disabled=!valid||busy;
+}
+function loadFile(f){
+ if(!f)return;if(!f.type.startsWith('video/')){setStatus('Please choose a video file.');return}
+ sourceFile=f;video.src=URL.createObjectURL(f);video.style.display='block';$('filemeta').hidden=false;$('filename').textContent=f.name;$('durationLabel').textContent='Reading duration…';$('result').style.display='none';
+ video.onloadedmetadata=()=>{duration=video.duration;$('durationLabel').textContent=fmt(duration);start.disabled=false;end.disabled=false;start.value='0';end.value=Math.min(15,duration).toFixed(1);start.max=duration;end.max=duration;setStatus('Video loaded. Set your start and end times.');updateSelection()};
+}
+$('choose').addEventListener('click',()=>fileInput.click());drop.addEventListener('click',e=>{if(e.target.id!=='choose')fileInput.click()});
+fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
+for(const ev of ['dragenter','dragover'])drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over')});
+for(const ev of ['dragleave','drop'])drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over')});
+drop.addEventListener('drop',e=>loadFile(e.dataTransfer.files[0]));
+start.addEventListener('input',updateSelection);end.addEventListener('input',updateSelection);
+video.addEventListener('timeupdate',()=>{});
+function safeName(s){return (s.trim().replace(/[^a-z0-9-_]+/gi,'-').replace(/^-+|-+$/g,'').slice(0,60)||'megamind-clip')+'.mp4'}
+async function getEngine(){
+ if(ffmpeg)return ffmpeg;
+ setStatus('Loading video engine for the first time…');
+ const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
+ const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');
+ ffmpeg=new FFmpeg();ffmpeg.on('progress',({progress})=>{$('progressbar').style.width=Math.max(0,Math.min(100,progress*100))+'%';setStatus('Processing video… '+Math.round(progress*100)+'%')});
+ const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd';
+ await ffmpeg.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});
+ return ffmpeg;
+}
+exportBtn.addEventListener('click',async()=>{
+ if(!sourceFile||busy)return;const a=Number(start.value),b=Number(end.value);
+ if(!(a>=0&&b>a&&b<=duration)){setStatus('Check that the end time is after the start and within the video.');return}
+ busy=true;updateSelection();$('result').style.display='none';$('progress').style.display='block';$('progressbar').style.width='0%';
+ let engine;
+ try{
+  engine=await getEngine();setStatus('Preparing your clip…');
+  const input='input-video',output='megamind-output.mp4';
+  await engine.writeFile(input,new Uint8Array(await sourceFile.arrayBuffer()));
+  await engine.exec(['-ss',String(a),'-i',input,'-t',String(b-a),'-c:v','libx264','-preset','ultrafast','-crf','23','-c:a','aac','-b:a','128k','-movflags','+faststart',output]);
+  const data=await engine.readFile(output);const blob=new Blob([data.buffer],{type:'video/mp4'});
+  if(outputUrl)URL.revokeObjectURL(outputUrl);outputUrl=URL.createObjectURL(blob);
+  $('download').href=outputUrl;$('download').download=safeName($('clipname').value);$('result').style.display='block';setStatus('Export complete. Your clip is ready to download.');
+  await engine.deleteFile(input);await engine.deleteFile(output);
+ }catch(err){console.error(err);setStatus('Export failed: '+(err?.message||'Please try a shorter or smaller video. Check that this page is served over HTTPS.'))}
+ finally{busy=false;updateSelection()}
+});
+window.addEventListener('beforeunload',()=>{if(outputUrl)URL.revokeObjectURL(outputUrl)});
+</script></body></html>
