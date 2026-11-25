@@ -63,9 +63,15 @@ async function getEngine(){
  setStatus('Loading video engine for the first time…');
  const {FFmpeg}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js');
  const {toBlobURL}=await import('https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.2/dist/esm/index.js');
- ffmpeg=new FFmpeg();ffmpeg.on('progress',({progress})=>{$('progressbar').style.width=Math.max(0,Math.min(100,progress*100))+'%';setStatus('Processing video… '+Math.round(progress*100)+'%')});
+ // Keep the engine local until load() has completed successfully. This lets a
+ // later click retry if the CDN/network fails during the first load.
+ const candidate=new FFmpeg();
+ candidate.on('progress',({progress})=>{$('progressbar').style.width=Math.max(0,Math.min(100,progress*100))+'%';setStatus('Processing video… '+Math.round(progress*100)+'%')});
  const base='https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/umd';
- await ffmpeg.load({coreURL:await toBlobURL(base+'/ffmpeg-core.js','text/javascript'),wasmURL:await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm')});
+ const coreURL=await toBlobURL(base+'/ffmpeg-core.js','text/javascript');
+ const wasmURL=await toBlobURL(base+'/ffmpeg-core.wasm','application/wasm');
+ await candidate.load({coreURL,wasmURL});
+ ffmpeg=candidate;
  return ffmpeg;
 }
 exportBtn.addEventListener('click',async()=>{
